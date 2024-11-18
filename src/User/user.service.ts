@@ -17,11 +17,23 @@ export class UserService {
 		}
 	}
 
-	public async CreateUserService({
-		name,
-		email,
-		password,
-	}: CreateUser): Promise<string> {
+	public async FindUserService({ id, email }: User) {
+		try {
+			if (email ?? false) {
+				const users: User =
+					await this.userRepository.FindUserByEmailRepository(email);
+				return users;
+			} else if (id ?? false) {
+				const users: User =
+					await this.userRepository.FindUserByIdRepository(id);
+				return users;
+			}
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
+
+	public async CreateUserService({ name, email, password }: CreateUser) {
 		try {
 			const user: User = {
 				id: randomUUID(),
@@ -30,7 +42,6 @@ export class UserService {
 				password,
 			};
 			await this.userRepository.CreateUserRepository(user);
-			return 'ok';
 		} catch (error) {
 			throw new Error(error);
 		}

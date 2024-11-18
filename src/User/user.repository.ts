@@ -9,20 +9,29 @@ export class UserRepository {
 	public async FindUsersRepository(): Promise<User[]> {
 		try {
 			const users: User[] = await this.prisma.user.findMany();
-			return [
-				{
-					id: '0,0,21',
-					name: '0,0,21',
-					email: '0,0,21',
-					password: '0,0,21',
-				},
-				{
-					id: '0,0,21',
-					name: '0,0,21',
-					email: '0,0,21',
-					password: '0,0,21',
-				},
-			];
+			return users;
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
+
+	public async FindUserByEmailRepository(email: string): Promise<User> {
+		try {
+			const user: User = await this.prisma.user.findFirst({
+				where: { email },
+			});
+			return user;
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
+
+	public async FindUserByIdRepository(id: string): Promise<User> {
+		try {
+			const user: User = await this.prisma.user.findUnique({
+				where: { id },
+			});
+			return user;
 		} catch (error) {
 			throw new Error(error);
 		}
