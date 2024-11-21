@@ -17,13 +17,22 @@ export class UserService {
 		}
 	}
 
-	public async FindUserService({ id, email }: User) {
+	public async FindUserByEmailService(email: string) {
 		try {
 			if (email ?? false) {
+				console.log(email);
 				const users: User =
 					await this.userRepository.FindUserByEmailRepository(email);
 				return users;
-			} else if (id ?? false) {
+			}
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
+
+	public async FindUserByIdService(id: string) {
+		try {
+			if (id ?? false) {
 				const users: User =
 					await this.userRepository.FindUserByIdRepository(id);
 				return users;
@@ -42,6 +51,37 @@ export class UserService {
 				password,
 			};
 			await this.userRepository.CreateUserRepository(user);
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
+
+	public async UpdateUserService({ id, name, email, password }: User) {
+		try {
+			const findById = await this.FindUserByIdService(id);
+			if (!findById) {
+				throw new Error('Usuário não encontrado');
+			}
+			const user = {
+				id,
+				email,
+				name,
+				password,
+			};
+			await this.userRepository.UpdateUserRepository(user);
+			return 'ok';
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
+
+	public async DeleteUserService(id: string) {
+		try {
+			const user = await this.FindUserByIdService(id);
+			if (!user) {
+				throw new Error('Usuário não encontrado');
+			}
+			await this.userRepository.DeleteUserRepository(user.id);
 		} catch (error) {
 			throw new Error(error);
 		}

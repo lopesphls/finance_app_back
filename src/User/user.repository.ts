@@ -17,7 +17,7 @@ export class UserRepository {
 
 	public async FindUserByEmailRepository(email: string): Promise<User> {
 		try {
-			const user: User = await this.prisma.user.findFirst({
+			const user: User = await this.prisma.user.findUnique({
 				where: { email },
 			});
 			return user;
@@ -47,6 +47,29 @@ export class UserRepository {
 					email,
 				},
 			});
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
+
+	public async UpdateUserRepository({ id, name, email, password }: User) {
+		try {
+			return await this.prisma.user.update({
+				where: { id },
+				data: {
+					name,
+					email,
+					password,
+				},
+			});
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
+
+	public async DeleteUserRepository(id: string) {
+		try {
+			await this.prisma.user.delete({ where: { id } });
 		} catch (error) {
 			throw new Error(error);
 		}
