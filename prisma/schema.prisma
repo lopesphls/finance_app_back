@@ -8,8 +8,36 @@ datasource db {
 }
 
 model User {
-  id       String @id @unique
+  id       String  @id @unique
   name     String
-  email    String @unique
+  email    String  @unique
   password String
+  money    Money[]
+}
+
+model Money {
+  id      Int       @id
+  balance Float
+  userId  String
+  user    User      @relation(fields: [userId], references: [id])
+  income  Income[]
+  Expense Expense[]
+}
+
+model Income {
+  id          Int      @id
+  amount      Float
+  description String
+  date        DateTime
+  moneyId     Int?
+  Money       Money?   @relation(fields: [moneyId], references: [id])
+}
+
+model Expense {
+  id          Int      @id
+  amount      Float
+  description String
+  date        DateTime
+  moneyId     Int?
+  Money       Money?   @relation(fields: [moneyId], references: [id])
 }
