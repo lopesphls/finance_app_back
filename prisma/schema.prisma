@@ -16,28 +16,28 @@ model User {
 }
 
 model Money {
-  id      Int       @id
+  id      Int       @id @default(autoincrement())
   balance Float
   userId  String
   user    User      @relation(fields: [userId], references: [id])
   income  Income[]
-  Expense Expense[]
+  expense Expense[]
 }
 
 model Income {
-  id          Int      @id
+  id          Int      @id @default(autoincrement())
   amount      Float
   description String
   date        DateTime
   moneyId     Int?
-  Money       Money?   @relation(fields: [moneyId], references: [id])
+  money       Money?   @relation(fields: [moneyId], references: [id])
 }
 
 model Expense {
-  id          Int      @id
+  id          Int      @id @default(autoincrement())
   amount      Float
   description String
   date        DateTime
   moneyId     Int?
-  Money       Money?   @relation(fields: [moneyId], references: [id])
+  money       Money?   @relation(fields: [moneyId], references: [id])
 }
